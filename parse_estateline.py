@@ -12,15 +12,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import datetime
 from time import strftime, gmtime
-# import ipyslack
-# %load_ext ipyslack
-# %slack_setup -t xoxp-193472796262-192716443172-193493151111-04ee68d0610db8a5d78ea6c451414f8a -c #general
 
 date_time = datetime.datetime.now()
 
+"""Place here the number of pages to parse from website"""
+
+# num_pages=
 
 # service_args=['--proxy=us-wa.proxymesh.com:31280'
-
 browser = webdriver.PhantomJS(executable_path='/../usr/local/bin/phantomjs')
 
 def split_on_simbol (df, col, smb, name):
@@ -91,8 +90,9 @@ def estateline_parse_all (number_of_pages):
         all_pages = pd.concat([all_pages, one_page])
     return all_pages
 
-
 parsed_df = estateline_parse_all(2)
 print ('parsed 1 page')
 formated_df = estateline_format(parsed_df)
-formated_df.to_excel('temp.xlsx', index=False)
+formated_df['to_search'] = formated_df['info_0'] + ' ' + formated_df['district'] + ' ' + formated_df['city']
+formated_df[['to_search']][:2].to_csv('../output/to_search.txt', header=False, index=False, sep='\t', mode='a')
+formated_df.to_excel('../output/parsed_estateline.xlsx', index=False)
