@@ -167,6 +167,7 @@ def post_processing (final_df):
     estate = pd.merge(estate, final_df, left_on='to_search', right_on='name', how='left')
     estate = estate[~estate['name'].isnull()]
     estate['count'] = estate.groupby('name')['to_search'].transform('count')
+    ### place here the number of count
     estate = estate[estate['count']==2]
     del estate['count']
     estate.to_excel('../output/20170925_parsed_estateline_external_info.xlsx', index=False)
@@ -179,4 +180,4 @@ links_df = read_data('parsed_google')
 parsed = parse_text_from_links(links_df)
 final_df = parse_all_pages(parsed)
 final_df.to_excel('../output/temp_to_del.xlsx', index=False)
-# estateline_parsed = post_processing(final_df)
+estateline_parsed = post_processing(final_df)
