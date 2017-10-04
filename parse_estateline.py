@@ -17,9 +17,8 @@ date_time = datetime.datetime.now()
 
 """Place here the number of pages to parse from website"""
 
-# num_pages=
+num_pages=2
 
-# service_args=['--proxy=us-wa.proxymesh.com:31280'
 browser = webdriver.PhantomJS(executable_path='/../usr/local/bin/phantomjs')
 
 def split_on_simbol (df, col, smb, name):
@@ -90,9 +89,9 @@ def estateline_parse_all (number_of_pages):
         all_pages = pd.concat([all_pages, one_page])
     return all_pages
 
-parsed_df = estateline_parse_all(2)
+parsed_df = estateline_parse_all(num_pages)
 print ('parsed 1 page')
 formated_df = estateline_format(parsed_df)
 formated_df['to_search'] = formated_df['info_0'] + ' ' + formated_df['district'] + ' ' + formated_df['city']
-formated_df[['to_search']][:2].to_csv('../output/to_search.txt', header=False, index=False, sep='\t', mode='a')
+# formated_df[['to_search']][:2].to_csv('../output/to_search.txt', header=False, index=False, sep='\t', mode='a')
 formated_df.to_excel('../output/parsed_estateline.xlsx', index=False)

@@ -33,7 +33,7 @@ def read_data (name_of_file):
     links_df['uid'] = links_df['link'] + ' ' + links_df['url']
     links_df =  links_df.drop_duplicates(subset='uid', keep='first')
     links_df['url'] = links_df['url'].apply(lambda x : x.split('>')[0])
-    links_df = links_df[:2]
+    # links_df = links_df[:2]
 
     return links_df
 
@@ -47,7 +47,7 @@ def parse_text_from_links (links_df):
     all_uid = []
     all_url = []
     for url, link, uid in zip(links_df['url'], links_df['link'], links_df['uid']):
-        print (url)
+        # print (url)
         browser.get(url)
         page = browser.page_source
         soup = BeautifulSoup(page)
@@ -66,8 +66,11 @@ def parse_one_page (text, link, name_of_link):
 
     text= text
     parsed_one = pd.DataFrame()
+    print ('parsing link:')
+    print (link)
 
     combinator = Combinator([
+
         Person,
         Organisation,
         Address,
@@ -168,9 +171,9 @@ def post_processing (final_df):
     estate = estate[~estate['name'].isnull()]
     estate['count'] = estate.groupby('name')['to_search'].transform('count')
     ### place here the number of count
-    estate = estate[estate['count']==2]
-    del estate['count']
-    estate.to_excel('../output/20170925_parsed_estateline_external_info.xlsx', index=False)
+    # estate = estate[estate['count']==2]
+    # del estate['count']
+    estate.to_excel('../output/20171004_parsed_estateline_external_info.xlsx', index=False)
 
     return estate
 
@@ -181,3 +184,5 @@ parsed = parse_text_from_links(links_df)
 final_df = parse_all_pages(parsed)
 final_df.to_excel('../output/temp_to_del.xlsx', index=False)
 estateline_parsed = post_processing(final_df)
+
+print ('finished')
